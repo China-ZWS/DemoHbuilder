@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/erp_base.css" />
+		<style type="text/css">
+			body {}
+			
+			.mui-content {
+				padding-bottom: 49px;
+			}
+			/*.mui-table-view {
+				margin: 10px;
+				border-radius: 10px;
+			}*/
+			
+			.erp-toolbar {
+				position: fixed;
+				bottom: 0px;
+				height: 49px;
+				width: 100%;
+				background: white;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.erp-toolbar-icon {
+				width: 30px;
+				height: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+	<div class="erp-toolbar" style="border-top:1px solid #dedfe0;">
+			<img class="erp-toolbar-icon" src="../../resource/image/erp_toolBar_add.png" />
+		</div>
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/Common/erp_navigaitonBar.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				subpages: [{
+					url: 'erp_nodeOptionlist.html',
+					id: 'erp_nodeOptionlist.html',
+					styles: {
+						top: '0px', //mui标题栏默认高度为45px；
+						bottom: '49px' //默认为0px，可不定义；
+					},
+
+				}]
+			});
+			mui.plusReady(main);
+
+			function main() {
+				mui('body').on('tap', '.erp-toolbar', function() {
+					var aniShow = "pop-in";
+					id = '../../html/account_manager/erp_signIn.html';
+					var href = '../../html/account_manager/erp_signIn.html'
+					var webview_style = {
+						popGesture: "close",
+						navigationbar: {
+							titletext: 'home页',
+							backgroundcolor: "#5b85aa",
+							titlecolor: "#ffffff",
+							autoBackButton: true,
+						},
+						background: "#f3f4f6"
+					}
+					var webview = plus.webview.create(href, href, webview_style);
+					plus.webview.show(webview, aniShow);
+				});
+			}
+			// add node event
+		</script>
+	</body>
+
+</html>

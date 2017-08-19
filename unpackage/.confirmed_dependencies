@@ -1,0 +1,43 @@
+{
+  "index.html": {
+    "href": "index.html",
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/update.js"
+    ],
+    "refer": [],
+    "priority": 0
+  },
+  "html/nodeOption/erp_nodeOption.html": {
+    "resources": [
+      "css/erp_base.css",
+      "js/mui.min.js",
+      "resource/image/erp_toolBar_add.png",
+      "css/mui.min.css",
+      "js/Common/erp_navigaitonBar.js",
+      "html/nodeOption/erp_nodeOptionlist.html",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "html/nodeOption/erp_nodeOptionlist.html",
+      "html/account_manager/erp_signIn.html"
+    ]
+  },
+  "html/nodeOption/erp_nodeOptionlist.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "html/account_manager/erp_signIn.html": {
+    "resources": [
+      "js/Common/erp_navigaitonBar.js",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  }
+}
