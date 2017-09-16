@@ -4,44 +4,21 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/erp_base.css" />
+
 	</head>
 
 	<body>
-		<div class="mui-content">
-			<ul class="mui-table-view">
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-						<div class="mui-media-body">
-							幸福
-							<p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-						<div class="mui-media-body">
-							木屋
-							<p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-						<div class="mui-media-body">
-							CBD
-							<p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-						</div>
-					</a>
-				</li>
-			</ul>
-
-		</div>
+		<ul class="mui-table-view"></ul>
 		<script src="../../js/mui.min.js"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../../js/Lib/CryptoJS v3/rollups/tripledes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/Lib/CryptoJS v3/components/mode-ecb.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			mui.init();
 			mui.plusReady(function() {
@@ -49,7 +26,103 @@
 					bounce: "vertical",
 					bounceBackground: "#efeff4"
 				});
+
+				/*
+				 * 添加节点数据监听
+				 */
+				function addListData(e) {
+					$('ul li').remove();
+					fetchData();
+				}
+				window.addEventListener('addDataEvent', addListData);
+
+				/**
+				 * row点击事件
+				 */
+				mui(".mui-table-view").on('tap', '.mui-table-view-cell', function() {
+					/**
+					 * 跳转
+					 */
+					pushPage($(this));
+				})
+
+				/*
+				 * 初始化数据加载
+				 */
+				fetchData();
 			})
+		</script>
+		<script type="text/javascript">
+			/**
+			 *  加载列表数据
+			 */
+			function fetchData() {
+				var ul = $(".mui-table-view");
+				var nodes = JSON.parse(plus.storage.getItem("nodes"));
+				if(!nodes) return;
+				for(var i = 0; i < nodes.length; i++) {
+					var dic = nodes[i];
+					var li = $("<li class='mui-table-view-cell mui-media'></li>");
+					var a = $("<a href='javascript:;'></a>");
+					var div = $("<div class='mui-media-body'></div>");
+					var p = $("<p class='mui-ellipsis'></p>");
+					p.text("节点名称：" + dic["NodeCode"]);
+					div.text(dic["NodeName"] + "服务器");
+					div.append(p);
+					a.append(div);
+					li.append(a);
+					ul.append(li);
+				}
+			}
+
+			/**
+			 * 跳转实现
+			 */
+			function pushPage(obj) {
+				//获取id
+				var index = obj.index();
+				var nodes = JSON.parse(plus.storage.getItem("nodes"));
+				plus.storage.setItem('requestDomain', getRequestDomain(nodes[index]));
+				var dic = nodes[index];
+
+				var aniShow = "pop-in";
+				var href = '../../html/account_manager/erp_signIn.html'
+				var webview_style = {
+					popGesture: "close",
+					navigationbar: {
+						backgroundcolor: "#5b85aa",
+						titlecolor: "#ffffff",
+						autoBackButton: true,
+						titletext: "登录"
+					},
+					background: "#f3f4f6"
+				}
+				var webview = plus.webview.create(href, href, webview_style);
+				plus.webview.show(webview, aniShow);
+			}
+
+			function getRequestDomain(n) {
+				var desKey = '5$mytx$*';
+				var nodeAddress = decryptByDES(n.NodeValue, desKey);
+				nodeAddress = nodeAddress.split(',')[0];
+				return nodeAddress;
+			}
+			/**
+			 * 
+			 * @param {Object} ciphertext
+			 * @param {Object} key
+			 */
+			function decryptByDES(ciphertext, key) {
+				var keyHex = CryptoJS.enc.Utf8.parse(key);
+				// direct decrypt ciphertext
+				var decrypted = CryptoJS.DES.decrypt({
+					ciphertext: CryptoJS.enc.Base64.parse(ciphertext)
+				}, keyHex, {
+					mode: CryptoJS.mode.ECB,
+					padding: CryptoJS.pad.Pkcs7
+				});
+				return decrypted.toString(CryptoJS.enc.Utf8);
+			}
 		</script>
 	</body>
 

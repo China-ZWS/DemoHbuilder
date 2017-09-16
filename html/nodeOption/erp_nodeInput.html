@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.mui-btn {
+				top: 15px;
+				width: 85%;
+				height: 40px;
+				background-color: #5b85aa;
+				border-radius: 20px;
+			}
+			</style>
+	</head>
+
+	<body>
+			<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<input type="text" class="mui-input-clear" placeholder="请输入服务器代码">
+				</div>
+			</form>
+			<div class="mui-button-row">
+				<button type="button" style="color: white;" class="mui-btn">确认</button>
+			</div>
+		</div>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/Lib/CryptoJS v3/rollups/tripledes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/Lib/CryptoJS v3/components/mode-ecb.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(main);
+
+			function main() {
+				mui(document.body).on('tap', '.mui-btn', function() {
+					plus.nativeUI.showWaiting();
+					var nodeCode = $('.mui-input-clear').val();
+					var requestUrl = 'http://api.muyingtianxia.com/ErpAPI/OnLineAPI.ashx?Action=GetNodeInfo&Data=&NodeId=' + nodeCode;
+
+					mui.ajax(requestUrl, {
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							plus.nativeUI.closeWaiting();
+							if(data.errcode == "1") {
+								plus.ui.toast('请输入有效的服务器代码');
+								return;
+							}
+							//						var tmpStr = plus.storage.getItem('nodelist');
+							//						var nodes = JSON.parse(tmpStr);
+							var nodes = JSON.parse(plus.storage.getItem("nodes"));
+							if(nodes) {
+								for(var i = 0; i = nodes.length; i++) {
+									var value = nodes[0];
+									if(value.NodeValue == data.NodeValue) {
+										plus.nativeUI.toast("节点服务器已存在");
+										return;
+									}
+								}
+							} else {
+								nodes = new Array();
+							}
+							var tArr = new Array();
+							data["NodeCode"] = nodeCode;
+							tArr.push(data);
+							var newNodes = nodes.concat(tArr);
+							plus.storage.setItem('nodes', JSON.stringify(newNodes));
+							console.log(newNodes.length);
+							plus.ui.toast('添加节点成功');
+							var view = plus.webview.getWebviewById("erp_nodeOptionlist"); //这个HBuilder在只有两个页面之间的时候可以用  
+							mui.fire(view, 'addDataEvent', {
+								datas: data
+							});
+							mui.back();
+						},
+						error: function(xhr, type, errorThrown) {
+							plus.nativeUI.closeWaiting();
+							//异常处理；
+						}
+					});
+				})
+
+			};
+		</script>
+	</body>
+
+</html>

@@ -1,1 +1,24 @@
-null
+{
+  "html/nodeOption/erp_nodeInput.html": {
+    "href": "html/nodeOption/erp_nodeInput.html",
+    "resources": [],
+    "priority": 0
+  },
+  "html/account_manager/erp_signIn.html": {
+    "href": "html/account_manager/erp_signIn.html",
+    "resources": [],
+    "priority": 1
+  },
+  "html/nodeOption/erp_nodeOptionlist.html": {
+    "href": "html/nodeOption/erp_nodeOptionlist.html",
+    "resources": [],
+    "refer": [],
+    "priority": 1
+  },
+  "html/nodeOption/erp_nodeOption.html": {
+    "href": "html/nodeOption/erp_nodeOption.html",
+    "resources": [],
+    "refer": [],
+    "priority": 0
+  }
+}

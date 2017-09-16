@@ -18,24 +18,77 @@
       "css/mui.min.css",
       "js/Common/erp_navigaitonBar.js",
       "html/nodeOption/erp_nodeOptionlist.html",
-      "fonts/mui.ttf"
+      "fonts/mui.ttf",
+      "js/mui.js",
+      "css/mui.css"
     ],
     "refer": [
       "html/nodeOption/erp_nodeOptionlist.html",
-      "html/account_manager/erp_signIn.html"
+      "html/account_manager/erp_signIn.html",
+      "html/nodeOption/erp_nodeInput.html"
     ]
   },
   "html/nodeOption/erp_nodeOptionlist.html": {
     "resources": [
       "js/mui.min.js",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "js/Lib/CryptoJS v3/components/mode-ecb.js",
+      "js/Lib/CryptoJS v3/rollups/tripledes.js",
+      "css/font-awesome.css"
     ],
-    "refer": []
+    "refer": [
+      "html/account_manager/erp_signIn.html"
+    ]
   },
   "html/account_manager/erp_signIn.html": {
     "resources": [
       "js/Common/erp_navigaitonBar.js",
       "js/mui.min.js",
+      "css/mui.min.css",
+      "html/account_manager/zhou.html",
+      "html/mainTabBar/erp_mainTabBar",
+      "css/erp_base.css",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "html/account_manager/zhou.html",
+      "html/mainTabBar/erp_mainTabBar.html"
+    ]
+  },
+  "html/nodeOption/erp_nodeInput.html": {
+    "href": "html/nodeOption/erp_nodeInput.html",
+    "resources": [
+      "css/mui.min.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "js/Lib/CryptoJS v3/components/mode-ecb.js",
+      "js/Lib/CryptoJS v3/rollups/tripledes.js"
+    ],
+    "refer": [],
+    "priority": 0
+  },
+  "html/mainTabBar/erp_mainTabBar.html": {
+    "resources": [
+      "css/mui.min.css",
+      "html/main/erp_main.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "html/addressBook/erp_addressBook.html",
+      "html/mine/erp_mine.html"
+    ]
+  },
+  "html/main/erp_main.html": {
+    "resources": [
+      "css/mui.min.css",
+      "fonts/fontawesome-webfont.ttf",
+      "js/Common/erp_navigaitonBar.js"
+    ],
+    "refer": []
+  },
+  "html/mine/erp_mine.html": {
+    "resources": [
       "css/mui.min.css"
     ],
     "refer": []

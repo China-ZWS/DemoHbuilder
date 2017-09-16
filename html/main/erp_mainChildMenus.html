@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/erp_base.css" />
+		<style type="text/css">
+			li {
+				list-style-type: none;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.icons {
+				width: 100%;
+				align-items: center;
+				display: inline-flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			
+			.icon-center {
+				color: #5B85AA;
+			}
+			
+			.icon-text-center {
+				color: #5B85AA;
+				font-size: 12px;
+				padding: 5px;
+			}
+			
+			.mui-table-view-cell {
+				background: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class='mui-row'></div>
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../../js/Common/erp_navigaitonBar.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(main);
+
+			function main() {
+				fetchData();
+				addUI();
+			}
+		</script>
+		<script type="text/javascript">
+			function fetchData() {
+				var self = plus.webview.currentWebview();
+				datas = self.datas;
+			}
+
+			function addUI() {
+				var $row = $('.mui-row');
+				for(var i = 0; i < datas.length; i++) {
+					var itemData = datas[i];
+					var $grid = $("<div class = 'mui-col-sm-6 mui-col-xs-6' style='padding:.5px;'>");
+					var $cell = $("<li class='mui-table-view-cell'></li>")
+					var $icon = $("<i></i>")
+					var $menuCaption = $("<a class='icon-text-center'></a>");
+					$icon.append($menuCaption);
+					$cell.append($icon);
+					$grid.append($cell);
+					$row.append($grid);
+
+					$cell.css('height', document.documentElement.clientWidth / 3);
+					$icon.attr('class', 'fa ' + 'fa-' + itemData.MenuIconUrl + ' fa-2x' + ' icons icon-center');
+					$icon.attr('style', 'color: #5B85AA;');
+					$menuCaption.text(itemData.MenuCaption);
+				}
+
+			}
+		</script>
+	</body>
+
+</html>

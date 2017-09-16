@@ -6,48 +6,89 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/erp_base.css" />
+
+		<style type="text/css">
+			.mui-btn {
+				top: 15px;
+				width: 85%;
+				height: 40px;
+				background-color: #5b85aa;
+				border-radius: 20px;
+			}
+		</style>
+
 	</head>
 
 	<body>
-		<ul class="mui-table-view">
-			<li class="mui-table-view-cell mui-media">
-				<a href="javascript:;">
-					<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					<div class="mui-media-body">
-						幸福
-						<p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-					</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media">
-				<a href="javascript:;">
-					<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					<div class="mui-media-body">
-						木屋
-						<p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-					</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media">
-				<a href="javascript:;">
-					<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					<div class="mui-media-body">
-						CBD
-						<p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-					</div>
-				</a>
-			</li>
-		</ul>
+
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>用户名</label>
+					<input type="text" class="mui-input-clear" placeholder="请输入用户名">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input type="password" class="mui-input-password" placeholder="请输入密码">
+				</div>
+			</form>
+			<div class="mui-button-row">
+				<button type="button" style="color: white;" class="mui-btn">确认</button>
+			</div>
+
+		</div>
 		<script src="../../js/mui.min.js"></script>
-		<script src="../../js/Common/erp_navigaitonBar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 		<script type="text/javascript">
-			mui.init({
-				swipeBack: true, //Boolean(默认false)启用右滑关闭功能
-				beforeback: function() {
-					alert(1);
-					//... //窗口关闭前处理其他业务详情点击 ↑ "关闭页面"链接查看
-				}
-			});
+			mui.init(
+
+			);
+			mui.plusReady(main);
+
+			function main() {
+				mui(document.body).on('tap', '.mui-btn', function() {
+					plus.nativeUI.showWaiting();
+					var requustDomain = plus.storage.getItem("requestDomain");
+					var accStr = $('.mui-input-clear').val();
+					var pwdStr = $('.mui-input-password').val();
+					var requestUrl = 'http://' + requustDomain + '/api/sys/UserHandler.ashx';
+					console.log(requestUrl);
+					mui.ajax(requestUrl, {
+						data: {
+							action: 'SysLogin',
+							username: 'Super',
+							password: 'pcsoft'
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							localStorage.setItem('userInfo', JSON.stringify(data['data']));
+							var info = localStorage.getItem('userInfo');
+
+							plus.nativeUI.closeWaiting();
+							plus.nativeUI.toast("登录成功");
+							gotoSignIn();
+						},
+						error: function(xhr, type, errorThrown) {
+							//异常处理；
+							console.log(type);
+							plus.nativeUI.closeWaiting();
+						}
+					});
+				});
+
+			}
+
+			function gotoSignIn() {
+				var curr = plus.webview.currentWebview();
+				var aniShow = "pop-in";
+				var href = '../../html/mainTabBar/erp_mainTabBar.html';
+				var webview_style = {}
+				var webview = plus.webview.create(href, 'erp_mainTabBar', webview_style);
+				plus.webview.show(webview, aniShow);
+			}
 		</script>
 	</body>
 

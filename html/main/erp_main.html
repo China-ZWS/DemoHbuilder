@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/erp_base.css" />
+		<style type="text/css">
+			li {
+				list-style-type: none;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.mui-slider {
+				height: 135px;
+				background: #5B85AA;
+			}
+			
+			.icons {
+				width: 100%;
+				align-items: center;
+				display: inline-flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			
+			.icon-header {
+				color: white;
+				height: 150px;
+			}
+			
+			.icon-text-header {
+				color: white;
+				padding: 5px;
+			}
+			
+			.icon-center {
+				color: #9da4b7;
+			}
+			
+			.icon-text-center {
+				color: #9da4b7;
+				font-size: 12px;
+				padding: 5px;
+			}
+			
+			.mui-table-view-cell {
+				background: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="slider" class="mui-slider">
+			<div></div>
+		</div>
+		<div class='mui-row'></div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/Common/erp_navigaitonBar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(main);
+
+			function main() {
+				fetchData();
+			}
+			mui(".mui-row").on('tap', '.mui-col-sm-4', function() {
+				pushPage($(this));
+			})
+		</script>
+		<script type="text/javascript">
+			function fetchData() {
+				plus.nativeUI.showWaiting();
+				var requustDomain = plus.storage.getItem("requestDomain");
+				var info = JSON.parse(localStorage.getItem('userInfo'));
+				var requestUrl = 'http://' + requustDomain + '/api/sys/UserHandler.ashx';
+				console.log(requestUrl);
+				mui.ajax(requestUrl, {
+					data: {
+						action: 'GetRoleRight',
+						menuId: '',
+						deviceName: 'Mobile',
+						token: info.Token
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					success: function(data) {
+						plus.nativeUI.closeWaiting();
+						if(data.errcode != '0') {
+							plus.nativeUI.toast(data.msg);
+						} else {
+							var tools = new Array();
+							var tempTools = new Array();
+							var items = new Array();
+							var parentMenuID = '100000';
+							var datas = data.data;
+							for(var i = 0; i < datas.length; i++) {
+								var dic = datas[i];
+								if(dic.IsToolBtn == '1') {
+									tempTools.push(dic);
+									if(tempTools.length == 2) {
+										tools.push(tempTools.concat());
+										tempTools.splice(0, tempTools.length);
+									}
+								} else {
+
+									if(parseFloat(parentMenuID) > parseFloat(dic.ParentMenuID) || dic.ParentMenuID == "") {
+										parentMenuID = dic.ParentMenuID;
+									}
+									items.push(dic);
+								}
+							}
+							if(tempTools.length) {
+								tools.push(tempTools);
+							}
+							// 加载banner
+							refreshBanner(tools);
+							results = getNewDatas(items, parentMenuID, 0, new Array());
+							refreshGrid(results);
+						}
+					},
+					error: function(xhr, type, errorThrown) { //异常处理；
+						plus.nativeUI.closeWaiting();
+					}
+				});
+			}
+
+			function getNewDatas(oldDatas, parentMenuID, index, carriers) {
+				if(index == oldDatas.length) {
+					console.log(oldDatas.length);
+					return carriers;
+				}
+				var dic = oldDatas[index];
+
+				if(dic.ParentMenuID == parentMenuID) {
+					var childMenus = getNewDatas(oldDatas, dic.MenuID, 0, new Array());
+					dic['childMenus'] = childMenus;
+					carriers.push(dic);
+				}
+				return getNewDatas(oldDatas, parentMenuID, index + 1, carriers);
+			}
+			/**
+			 * 刷新banner
+			 * @param {Object} data
+			 */
+			function refreshBanner(data) {
+				var $banner = $('.mui-slider > div');
+				if(data.length > 1) {
+					var $slider_item = $('<div class="mui-slider-item mui-slider-item-duplicate"></div>');
+					$banner.append($slider_item);
+					configurationRow(data[data.length - 1], $slider_item);
+					$banner.attr('class', 'mui-slider-group mui-slider-loop');
+				} else {
+					$banner.attr('class', 'mui-slider-group');
+				}
+
+				for(var i = 0; i < data.length; i++) {
+					var $slider_item = $('<div class="mui-slider-item"></div>');
+					$banner.append($slider_item);
+					configurationRow(data[i], $slider_item);
+				}
+
+				if(data.length > 1) {
+					var $slider_item = $('<div class="mui-slider-item mui-slider-item-duplicate"></div>');
+					$banner.append($slider_item);
+					configurationRow(data[0], $slider_item);
+					configurationLoop(data);
+				}
+				var gallery = mui('.mui-slider');
+				gallery.slider({
+					interval: 0 //自动轮播周期，若为0则不自动播放，默认为0；
+				});
+			}
+			/**
+			 * 多个快捷菜单的controlPage配置
+			 * @param {Object} data
+			 */
+			function configurationLoop(data) {
+				var $pageControl = $("<div class='mui-slider-indicator'></div>");
+				for(var j = 0; j < data.length; j++) {
+					if(j == 0) {
+						$pageControl.append('<div class="mui-indicator mui-active"></div>');
+					} else {
+						$pageControl.append('<div class="mui-indicator"></div>');
+					}
+				}
+				$('#slider').append($pageControl);
+			}
+			/**
+			 * 每行row的item 配置
+			 * @param {Object} data
+			 * @param {Object} item
+			 */
+			function configurationRow(data, item) {
+				var $row = $("<div class='mui-row'></div>");
+				for(var j = 0; j < data.length; j++) {
+					var itemData = data[j];
+					var $grid = $("<div class = 'mui-col-sm-6 mui-col-xs-6'>");
+					var $i = $("<i></i>")
+					$i.attr('class', 'fa ' + 'fa-' + itemData.MenuIconUrl + ' fa-3x' + ' icons icon-header');
+					var $menuCaption = $("<a class='icon-text-header' style='font-size:15px;'></a>");
+					$menuCaption.text(itemData.MenuCaption);
+					$i.append($menuCaption);
+					$grid.append($i);
+					$row.append($grid);
+				}
+				item.append($row);
+			}
+
+			function refreshGrid(data) {
+				var $row = $('.mui-row');
+				for(var i = 0; i < data.length; i++) {
+					var itemData = data[i];
+					var $grid = $("<div class = 'mui-col-sm-4 mui-col-xs-4' style='padding:.5px;'>");
+					var $cell = $("<li class='mui-table-view-cell'></li>")
+					var $icon = $("<i></i>")
+					var $menuCaption = $("<a class='icon-text-center'></a>");
+					$icon.append($menuCaption);
+					$cell.append($icon);
+					$grid.append($cell);
+					$row.append($grid);
+					$cell.css('height',document.documentElement.clientWidth / 3);
+					$icon.attr('class', 'fa ' + 'fa-' + itemData.MenuIconUrl + ' fa-2x' + ' icons icon-center');
+					$menuCaption.text(itemData.MenuCaption);
+				}
+			}
+
+			/**
+			 * 跳转实现
+			 */
+			function pushPage(obj) {
+				//获取id
+				var index = obj.index();
+				var dic = results[index];
+				console.log('ssda   ' + dic.childMenus);
+				var aniShow = "pop-in";
+				var href = '../../html/main/erp_mainChildMenus.html'
+				var webview_style = {
+					popGesture: "close",
+					navigationbar: {
+						backgroundcolor: "#5b85aa",
+						titlecolor: "#ffffff",
+						autoBackButton: true,
+						titletext: dic.MenuCaption
+					},
+					background: "#f3f4f6",
+					
+
+				}
+				var webview = plus.webview.create(href, 'erp_mainChildMenus', webview_style,{datas: dic.childMenus});
+				plus.webview.show(webview, aniShow);
+			}
+		</script>
+	</body>
+
+</html>

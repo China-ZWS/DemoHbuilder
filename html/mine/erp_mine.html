@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/erp_base.css" />
+		<style type="text/css">
+			#header {
+				height: 150px;
+				background: #5B85AA;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			
+			.mui-media-body {
+				display: inline;
+				padding-left: 5px;
+				font-size: 15px;
+				color: #9da4b7;
+			}
+			
+			.fa {
+				color: #9da4b7;
+			}
+			
+			.userIcon {
+				/*margin:0 auto;*/
+				margin-top: 10px;
+				width: 70px;
+				width: 70px;
+				border-radius: 50%;
+				border-width: 2px;
+				border-color: white;
+			}
+			
+			#info {
+				font-size: 11px;
+				color: white;
+				padding: 10px;
+			}
+			
+			#name {
+				font-size: 15px;
+			}
+			
+			.mui-btn {
+				top: 15px;
+				width: 85%;
+				height: 40px;
+				background-color: #5b85aa;
+				border-radius: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="header">
+			<img class="userIcon" src="../../images/defaultIcon.png" onclick="eventWihtChangeUserIcon"></img>
+			<label id="info">店员 : <strong id="name">清风</strong></label>
+			<div class="code">
+
+			</div>
+		</div>
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					<i class="fa fa-money" aria-hidden="true"></i>
+					<div class="mui-media-body">
+						薪资
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					<i class="fa fa-wrench" aria-hidden="true"></i>
+					<div class="mui-media-body">
+						修改密码
+					</div>
+
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					<i class="fa fa-info-circle" aria-hidden="true"></i>
+					<div class="mui-media-body">
+						我的节点
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					<i class="fa fa-trash-o" aria-hidden="true"></i>
+					<div class="mui-media-body">
+						清除缓存
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell ">
+				<a class="mui-navigate-right">
+					<i class="fa fa-h-square" aria-hidden="true"></i>
+					<div class="mui-media-body">
+						关于我们
+					</div>
+				</a>
+			</li>
+		</ul>
+		<div class="mui-button-row">
+			<button type="button" style="color: white;" class="mui-btn" onclick="eventWithSignOut()">退出登录</button>
+		</div>
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/Common/erp_navigaitonBar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(main);
+
+			function main() {
+				addUI();
+			}
+			mui('.mui-table-view').on('tap', '.mui-table-view-cell', function() {
+				pushPage($(this));
+			})
+		</script>
+		<script type="text/javascript">
+			function addUI() {
+
+				var info = JSON.parse(localStorage.getItem('userInfo'));
+				console.log(localStorage.getItem('userInfo'));
+				var nb = plus.webview.currentWebview().getTitleNView();;
+				nb.drawText(info.OperatorName, {}, {
+					color: '#FFF'
+				}); //
+
+			}
+
+			function fetchData() {
+
+			}
+		</script>
+		<script type="text/javascript">
+			function eventWihtChangeUserIcon() {
+
+			}
+			/**
+			 * 跳转实现
+			 */
+			function pushPage(obj) {
+				//获取id
+				var index = obj.index();
+
+				var aniShow = "pop-in";
+				var webview_style = {
+					popGesture: "close",
+					navigationbar: {
+						backgroundcolor: "#5b85aa",
+						titlecolor: "#ffffff",
+						autoBackButton: true,
+						titletext: dic.MenuCaption
+					},
+					background: "#f3f4f6",
+				}
+				var webview = plus.webview.create(href, 'erp_changePwd', webview_style);
+				plus.webview.show(webview, aniShow);
+			}
+
+			function eventWithSignOut() {
+				var wvs = plus.webview.all();　　 //所有窗口对象 
+				var launch = plus.webview.getLaunchWebview();　　 //首页窗口对象 
+				var self = plus.webview.currentWebview();　　 //当前窗口对象 
+				for(var i = 0, len = wvs.length; i < len; i++) {　　　 // 首页以及当前窗口对象，不关闭； 
+					if(wvs[i].id === self.id || wvs[i].id === launch.id || wvs[i].id === "erp_mainTabBar") {　　
+						console.log(1111 + localStorage.erp_mainTabBar);
+
+						continue;
+					} else {
+						console.log(wvs[i].id);
+						wvs[i].close('none');　　 //关闭中间的窗口对象，为防止闪屏，不使用动画效果； 
+					}
+				}　　 // 此时，窗口对象只剩下首页以及当前窗口，直接关闭当前窗口即可； 
+				pushPage();
+				plus.webview.getWebviewById('erp_mainTabBar').close();
+			}
+
+			/**
+			 * 跳转实现
+			 */
+			function pushPage(obj) {
+				//获取id
+
+				var aniShow = "pop-in";
+				var href = '../../html/nodeOption/erp_nodeOption.html'
+				var webview_style = {
+					popGesture: "close",
+					navigationbar: {
+						backgroundcolor: "#5b85aa",
+						titlecolor: "#ffffff",
+					},
+					background: "#f3f4f6"
+				}
+				var webview = plus.webview.create(href, href, webview_style);
+				plus.webview.show(webview, aniShow);
+			}
+		</script>
+	</body>
+
+</html>

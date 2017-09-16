@@ -5,7 +5,7 @@
 		"iPad"
 	],
 	"id": "H564571C1",/*应用的标识，创建应用时自动生成，勿手动修改*/
-	"name": "ERPHBuilder",/*应用名称，程序桌面图标名称*/
+	"name": "晧客",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.0.0",/*应用版本名称*/
 		"code": "83"
@@ -135,6 +135,7 @@
 				"frameworks": []
 			},
 			"google": {
+			"hardwareAccelerated":true,
 				"packagename": "",/*Android应用包名，如io.dcloud.HelloH5*/
 				"keystore": "",/*Android应用打包使用的密钥库文件*/
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
@@ -166,10 +167,7 @@
 					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
 				]
 			},
-			"orientation": [
-				"portrait-primary",
-				"portrait-secondary"
-			],/*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
+			"orientation": ["portrait-primary"],/*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
 			"icons": {
 				"ios": {
 					"prerendered": true, /*应用图标是否已经高亮处理，在iOS6及以下设备上有效*/
@@ -260,16 +258,79 @@
 					"css/mui.min.css",
 					"js/Common/erp_navigaitonBar.js",
 					"html/nodeOption/erp_nodeOptionlist.html",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"js/mui.js",
+					"css/mui.css"
 				],
 				"refer": [
-					"html/account_manager/erp_signIn.html"
+					"html/account_manager/erp_signIn.html",
+					"html/nodeOption/erp_nodeInput.html"
 				],
 				"priority": 0
 			},
 			"html/nodeOption/erp_nodeOptionlist.html": {
 				"resources": [
 					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/Lib/CryptoJS v3/components/mode-ecb.js",
+					"js/Lib/CryptoJS v3/rollups/tripledes.js",
+					"css/font-awesome.css"
+				],
+				"refer": [
+					"html/account_manager/erp_signIn.html"
+				],
+				"priority": 0
+			},
+			"html/account_manager/erp_signIn.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/Common/erp_navigaitonBar.js",
+					"fonts/mui.ttf",
+					"css/erp_base.css"
+				],
+				"refer": [
+					"html/mainTabBar/erp_mainTabBar.html"
+				],
+				"priority": 0
+			},
+			"html/nodeOption/erp_nodeInput.html": {
+				"href": "html/nodeOption/erp_nodeInput.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"js/Lib/CryptoJS v3/components/mode-ecb.js",
+					"js/Lib/CryptoJS v3/rollups/tripledes.js"
+				],
+				"priority": 0,
+				"refer": []
+			},
+			"html/mainTabBar/erp_mainTabBar.html": {
+				"resources": [
+					"css/mui.min.css",
+					"html/main/erp_main.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"html/addressBook/erp_addressBook.html",
+					"html/mine/erp_mine.html"
+				],
+				"priority": 0
+			},
+			"html/main/erp_main.html": {
+				"resources": [
+					"css/mui.min.css",
+					"fonts/fontawesome-webfont.ttf",
+					"js/Common/erp_navigaitonBar.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/mine/erp_mine.html": {
+				"resources": [
 					"css/mui.min.css"
 				],
 				"refer": [],
@@ -278,15 +339,97 @@
 		},
 		"idle": {
 			"resources": [
-				"html/mainTabBar/tab-webview-subpage-chat.html",
-				"html/mainTabBar/tab-webview-subpage-setting.html",
-				"main.html",
-				"html/mainTabBar/tab-webview-subpage-contact.html",
-				"html/mainTabBar/tab-webview-main.html",
-				"js/mui.js",
-				"css/mui.css",
+				"js/Lib/CryptoJS v3/components/sha3-min.js",
+				"js/Lib/CryptoJS v3/components/x64-core.js",
+				"js/Lib/CryptoJS v3/components/evpkdf.js",
+				"js/Lib/CryptoJS v3/components/evpkdf-min.js",
+				"js/Lib/CryptoJS v3/components/sha512.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-ripemd160.js",
+				"js/Lib/CryptoJS v3/components/md5.js",
+				"js/Lib/CryptoJS v3/rollups/sha1.js",
+				"js/Lib/CryptoJS v3/components/hmac.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-sha384.js",
+				"js/Lib/CryptoJS v3/components/pad-iso97971-min.js",
+				"js/Lib/CryptoJS v3/rollups/sha384.js",
+				"js/Lib/CryptoJS v3/components/lib-typedarrays-min.js",
+				"js/Lib/CryptoJS v3/components/sha3.js",
+				"js/Lib/CryptoJS v3/components/sha256-min.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-sha256.js",
+				"js/Lib/CryptoJS v3/components/pad-iso10126.js",
+				"js/Lib/CryptoJS v3/components/sha512-min.js",
+				"js/Lib/CryptoJS v3/components/rabbit-legacy.js",
+				"js/Lib/CryptoJS v3/rollups/sha3.js",
+				"html/mainTabBar/erp_mainTabBar",
+				"js/Lib/CryptoJS v3/rollups/rabbit.js",
+				"js/Lib/CryptoJS v3/components/mode-ofb.js",
+				"js/Lib/CryptoJS v3/rollups/rc4.js",
+				"js/Lib/CryptoJS v3/rollups/sha224.js",
+				"js/Lib/CryptoJS v3/components/mode-cfb-min.js",
+				"js/Lib/CryptoJS v3/components/pad-nopadding.js",
+				"js/Lib/CryptoJS v3/components/sha224-min.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-sha224.js",
+				"js/Lib/CryptoJS v3/components/enc-utf16.js",
+				"js/Lib/messenger.js",
+				"js/Lib/CryptoJS v3/components/enc-base64-min.js",
+				"js/Lib/CryptoJS v3/components/mode-ctr-gladman.js",
+				"js/Lib/CryptoJS v3/components/pad-zeropadding-min.js",
+				"js/Lib/CryptoJS v3/components/rc4.js",
+				"js/Lib/CryptoJS v3/components/ripemd160-min.js",
+				"js/Lib/CryptoJS v3/components/aes.js",
+				"js/Lib/CryptoJS v3/components/tripledes.js",
+				"js/Lib/CryptoJS v3/components/sha384-min.js",
+				"js/Lib/CryptoJS v3/components/pad-ansix923-min.js",
+				"js/Lib/CryptoJS v3/components/format-hex-min.js",
+				"js/Lib/CryptoJS v3/components/sha1-min.js",
+				"js/Lib/CryptoJS v3/components/rabbit.js",
+				"js/Lib/CryptoJS v3/components/tripledes-min.js",
+				"js/Lib/CryptoJS v3/components/rabbit-min.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-sha3.js",
+				"js/Lib/CryptoJS v3/components/aes-min.js",
+				"js/Common/fdaf .html",
+				"js/Lib/CryptoJS v3/components/sha224.js",
+				"js/Lib/CryptoJS v3/components/ripemd160.js",
+				"js/Lib/CryptoJS v3/components/core.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-md5.js",
+				"js/Lib/CryptoJS v3/components/sha384.js",
+				"js/Lib/CryptoJS v3/rollups/aes.js",
+				"js/Lib/CryptoJS v3/rollups/pbkdf2.js",
+				"js/Lib/CryptoJS v3/components/pbkdf2-min.js",
+				"js/Lib/CryptoJS v3/components/mode-ctr-gladman-min.js",
+				"js/Lib/CryptoJS v3/components/sha1.js",
+				"js/Lib/CryptoJS v3/components/pbkdf2.js",
+				"js/Lib/CryptoJS v3/components/mode-ctr-min.js",
+				"js/Lib/CryptoJS v3/components/hmac-min.js",
+				"js/Lib/CryptoJS v3/components/mode-cfb.js",
+				"js/Lib/CryptoJS v3/components/mode-ctr.js",
+				"js/Lib/CryptoJS v3/components/sha256.js",
+				"js/Lib/CryptoJS v3/components/pad-iso10126-min.js",
+				"js/Lib/CryptoJS v3/rollups/rabbit-legacy.js",
+				"js/Lib/CryptoJS v3/components/mode-ofb-min.js",
+				"js/Lib/CryptoJS v3/components/lib-typedarrays.js",
 				"js/Common/erp_base.js",
-				"html/mainTabBar/tab-webview-subpage-about.html"
+				"js/Lib/CryptoJS v3/components/enc-utf16-min.js",
+				"js/Lib/CryptoJS v3/rollups/ripemd160.js",
+				"js/Lib/CryptoJS v3/components/pad-ansix923.js",
+				"js/Lib/CryptoJS v3/components/pad-iso97971.js",
+				"js/Lib/CryptoJS v3/components/enc-base64.js",
+				"js/Lib/CryptoJS v3/components/pad-nopadding-min.js",
+				"js/Lib/CryptoJS v3/components/pad-zeropadding.js",
+				"js/Lib/CryptoJS v3/rollups/hmac-sha512.js",
+				"js/Lib/CryptoJS v3/rollups/md5.js",
+				"js/Lib/CryptoJS v3/components/x64-core-min.js",
+				"js/Lib/CryptoJS v3/components/rabbit-legacy-min.js",
+				"js/Lib/CryptoJS v3/components/cipher-core.js",
+				"js/Lib/CryptoJS v3/components/rc4-min.js",
+				"js/Lib/CryptoJS v3/components/mode-ecb-min.js",
+				"js/Lib/CryptoJS v3/rollups/sha256.js",
+				"main.html",
+				"js/Lib/CryptoJS v3/rollups/hmac-sha1.js",
+				"js/Lib/CryptoJS v3/rollups/sha512.js",
+				"js/Lib/CryptoJS v3/components/core-min.js",
+				"js/Lib/CryptoJS v3/components/md5-min.js",
+				"js/Lib/CryptoJS v3/components/format-hex.js",
+				"js/Lib/CryptoJS v3/components/cipher-core-min.js"
 			]
 		}
 	},
